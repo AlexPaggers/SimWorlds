@@ -1,13 +1,15 @@
 #pragma once
-#include "gameobject.h"
+#include "CMOGO.h"
+#include <vector>
 
-class mass : public GameObject
+class mass : public CMOGO
 {
 public:
-	mass();
+	mass(string _fileName, ID3D11Device* _pd3dDevice, IEffectFactory* _EF);
 	~mass();
 	
 	void Tick(GameData* _GD);
+	mass* findClosestMass( std::vector<mass> masses );
 
 
 private:
