@@ -1,9 +1,30 @@
 #include "mass.h"
+#include "ImageGO2D.h"
+#include "DDSTextureLoader.h"
+#include "DrawData2D.h"
+#include "GameData.h"
+#include "helper.h"
 
 
-
-mass::mass(string _fileName, ID3D11Device* _pd3dDevice, IEffectFactory* _EF) : CMOGO(_fileName, _pd3dDevice, _EF)
+mass::mass(string _fileName, ID3D11Device* _GD) : ImageGO2D(_fileName, _GD)
 {
+	string fullfilename =
+#if DEBUG
+		"../Debug/"
+#else
+		"../Release/"
+#endif
+		+ _fileName + ".dds";
+	HRESULT hr = CreateDDSTextureFromFile(_GD, Helper::charToWChar(fullfilename.c_str()), nullptr, &m_pTextureRV);
+
+	//this nasty thing is required to find out the size of this image!
+	ID3D11Resource *pResource;
+	D3D11_TEXTURE2D_DESC Desc;
+	m_pTextureRV->GetResource(&pResource);
+	((ID3D11Texture2D *)pResource)->GetDesc(&Desc);
+
+	m_origin = 0.5f*Vector2((float)Desc.Width, (float)Desc.Height);//around which rotation and scaing is done
+
 }
 
 
@@ -15,17 +36,4 @@ void mass::Tick(GameData * _GD)
 {
 }
 
-mass* mass::findClosestMass(std::vector<mass> masses)
-{
-	mass* current_selected_mass;
-	for (auto it = masses.begin(); it != masses.end(); ++it)
-	{
-		if ()
-		{
 
-		}
-		current_selected_mass = it;
-	}
-
-	return current_selected_mass;
-}

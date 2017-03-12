@@ -1,25 +1,23 @@
 #pragma once
-#include "CMOGO.h"
+#include "ImageGO2D.h"
 #include <vector>
 
-class mass : public CMOGO
+class mass : public ImageGO2D
 {
 public:
-	mass(string _fileName, ID3D11Device* _pd3dDevice, IEffectFactory* _EF);
+	mass(string _fileName, ID3D11Device* _GD);
 	~mass();
 	
 	void Tick(GameData* _GD);
-	mass* findClosestMass( std::vector<mass> masses );
+
 
 
 private:
 	float			m_mass;	
 	const float		m_gravitational_constant = 1.0f;
 
-	Vector3			m_gravity;
-	Vector3			m_velocity;
-	Vector3			m_acceleration;
+protected:
 
-	bool			m_stationary;
+	ID3D11ShaderResourceView* m_pTextureRV;
 };
 

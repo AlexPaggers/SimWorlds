@@ -133,7 +133,7 @@
       <Filter>Objects\Example VBGOs\Headers</Filter>
     </ClInclude>
     <ClInclude Include="mass.h">
-      <Filter>Objects\Headers</Filter>
+      <Filter>Objects\2D\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -192,7 +192,7 @@
       <Filter>Objects\2D\Source</Filter>
     </ClCompile>
     <ClCompile Include="mass.cpp">
-      <Filter>Objects\Source</Filter>
+      <Filter>Objects\2D\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

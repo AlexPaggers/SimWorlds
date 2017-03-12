@@ -24,3 +24,4 @@
 #include "GameObject2D.h"
 #include "ImageGO2D.h"
 #include "TextGO2D.h"
+#include "mass.h"

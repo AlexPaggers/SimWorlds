@@ -23,6 +23,7 @@ class GameObject;
 class GameObject2D;
 class Camera;
 class TPSCamera;
+class mass;
 struct GameData;
 struct DrawData;
 struct DrawData2D;
