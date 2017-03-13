@@ -11,6 +11,7 @@
 #include "GameData.h"
 #include "drawdata.h"
 #include "DrawData2D.h"
+#include <AntTweakBar.h>
 
 
 using namespace DirectX;
@@ -97,6 +98,9 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	m_DD->m_cam = m_cam;
 	m_DD->m_light = m_light;
 
+	//Make window
+	
+	
 	//add random content to show the various what you've got here
 	Terrain* terrain = new Terrain("table.cmo", _pd3dDevice, m_fxFactory, Vector3(100.0f, 0.0f, 100.0f), 0.0f, 0.0f, 0.0f, 0.25f * Vector3::One);
 	m_GameObjects.push_back(terrain);

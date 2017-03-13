@@ -7,6 +7,7 @@
 
 #include <dinput.h>
 #include "GameState.h"
+#include <AntTweakBar.h>
 
 using namespace DirectX;
 
@@ -14,6 +15,9 @@ struct GameData
 {
 	float m_dt;  //time step since last frame
 	GameState m_GS; //global GameState
+	float m_gravitational_constant;
+
+	
 
 	//player input
 	unsigned char* m_keyboardState; //current state of the Keyboard
