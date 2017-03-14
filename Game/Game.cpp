@@ -98,11 +98,14 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	m_DD->m_light = m_light;
 
 	//Make window
-	TwInit(TW_DIRECT3D11, m_DD2D);
+	TwInit(TW_DIRECT3D11, _pd3dDevice); // for Direct3D 11
+	TwWindowSize(width, height);
 	
-	//add random content to show the various what you've got here
-	Terrain* terrain = new Terrain("table.cmo", _pd3dDevice, m_fxFactory, Vector3(100.0f, 0.0f, 100.0f), 0.0f, 0.0f, 0.0f, 0.25f * Vector3::One);
-	m_GameObjects.push_back(terrain);
+	TwBar* mybar;
+	mybar = TwNewBar("Settings");
+
+	TwAddVarRW(mybar, "gravity", TW_TYPE_FLOAT, &m_GD->m_gravitational_constant, "min=0 max=10 step=0.01");
+
 
 
 
@@ -112,7 +115,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	m_GameObject2Ds.push_back(logo);
 
 	TextGO2D* text = new TextGO2D("Test Text");
-	text->SetPos(Vector2(100, 10));
+	text->SetPos(Vector2(200, 10));
 	text->SetColour(Color((float*)&Colors::Yellow));
 	m_GameObject2Ds.push_back(text);
 
@@ -197,12 +200,12 @@ bool Game::Tick()
 	//lock the cursor to the centre of the window
 	RECT window;
 	GetWindowRect(m_hWnd, &window);
-	SetCursorPos((window.left + window.right) >> 1, (window.bottom + window.top) >> 1);
 
 	//calculate frame time-step dt for passing down to game objects
 	DWORD currentTime = GetTickCount();
 	m_GD->m_dt = min((float)(currentTime - m_playTime) / 1000.0f, 0.1f);
 	m_playTime = currentTime;
+
 
 	//start to a VERY simple FSM
 	switch (m_GD->m_GS)
@@ -279,6 +282,8 @@ void Game::Draw(ID3D11DeviceContext* _pd3dImmediateContext)
 
 	//drawing text screws up the Depth Stencil State, this puts it back again!
 	_pd3dImmediateContext->OMSetDepthStencilState(m_states->DepthDefault(), 0);
+
+	TwDraw();
 };
 
 

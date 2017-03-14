@@ -95,9 +95,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
-    <IncludePath>$(SolutionDir)..\AntTweakBar\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);..\Game</IncludePath>
-    <LibraryPath>$(SolutionDir)..\AntTweakBar\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir);..\Lib\um\x86;..\Bin\Desktop_2015\$(Platform)\$(Configuration)\</LibraryPath>
-    <SourcePath>$(SolutionDir)..\AntTweakBar\src;$(SourcePath)</SourcePath>
+    <IncludePath>$(SolutionDir)\AntTweakBar\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);..\Game</IncludePath>
+    <LibraryPath>$(SolutionDir)\AntTweakBar\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir);..\Lib\um\x86;..\Bin\Desktop_2015\$(Platform)\$(Configuration)\</LibraryPath>
+    <SourcePath>$(SolutionDir)\AntTweakBar\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">
     <LinkIncremental>true</LinkIncremental>
@@ -137,7 +137,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;DEBUG;PROFILE;_WINDOWS;_WIN32_WINNT=0x0600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\AntTweakBar\include;..\Game;..\Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\AntTweakBar\include;..\Game;..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalOptions> %(AdditionalOptions)</AdditionalOptions>

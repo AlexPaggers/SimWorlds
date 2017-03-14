@@ -72,9 +72,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>..\Bin\Desktop_2015\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>..\Bin\Desktop_2015\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)..\AntTweakBar\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\AntTweakBar\lib;$(LibraryPath)</LibraryPath>
-    <SourcePath>$(SolutionDir)..\AntTweakBar\src;$(SourcePath)</SourcePath>
+    <IncludePath>$(SolutionDir)\AntTweakBar\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\AntTweakBar\lib;$(LibraryPath)</LibraryPath>
+    <SourcePath>$(SolutionDir)\AntTweakBar\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\Bin\Desktop_2015\$(Platform)\$(Configuration)\</OutDir>
@@ -85,7 +85,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\AntTweakBar\include;..\Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\AntTweakBar\include;..\Inc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_DEBUG;DEBUG</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -142,6 +142,7 @@
     <ClInclude Include="mass.h" />
     <ClInclude Include="ObjectList.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Player2D.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TextGO2D.h" />
     <ClInclude Include="TPSCamera.h" />
@@ -167,6 +168,7 @@
     <ClCompile Include="MarchCubes.cpp" />
     <ClCompile Include="mass.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Player2D.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TextGO2D.cpp" />
     <ClCompile Include="TPSCamera.cpp" />

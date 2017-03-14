@@ -14,7 +14,6 @@ public:
 
 private:
 	float			m_mass;	
-	const float		m_gravitational_constant = 1.0f;
 
 protected:
 
