@@ -13,7 +13,7 @@ public:
 
 
 private:
-	float			m_mass;	
+	float	m_mass;	
 
 protected:
 

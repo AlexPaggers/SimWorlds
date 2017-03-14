@@ -34,12 +34,16 @@ public:
 	void SetScale(float _scale) { m_scale = _scale * Vector2::One; }
 	void SetOrigin(Vector2 _origin) { m_origin = _origin; }
 
+	//Getters
+
+	Vector2 getPos() { return m_pos; }
+
 protected:
-	Vector2 m_pos;
-	float m_rotation;
-	Vector2 m_scale;
-	Color m_colour;
-	Vector2 m_origin;
+	Vector2		m_pos;
+	float		m_rotation;
+	Vector2		m_scale;
+	Color		m_colour;
+	Vector2		m_origin;
 
 };
 
