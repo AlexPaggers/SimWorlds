@@ -12,11 +12,10 @@
 #include "drawdata.h"
 #include "DrawData2D.h"
 
-
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
-Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance) 
+Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 {
 	//set up audio
 	CoInitializeEx(nullptr, COINIT_MULTITHREADED);
@@ -54,7 +53,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	m_GD = new GameData;
 	m_GD->m_keyboardState = m_keyboardState;
 	m_GD->m_prevKeyboardState = m_prevKeyboardState;
-	//m_GD->m_GS = GS_PLAY_TPS_CAM;
+	m_GD->m_GS = GS_PLAY_TPS_CAM;
 	m_GD->m_mouseState = &m_mouseState;
 
 	//set up DirectXTK Effects system
@@ -89,6 +88,13 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
 	m_GameObjects.push_back(m_light);
 
+	//add Player
+	Player* pPlayer = new Player("BirdModelV1.cmo", _pd3dDevice, m_fxFactory);
+	m_GameObjects.push_back(pPlayer);
+
+	//add a secondary camera
+	m_TPScam = new TPSCamera(0.25f * XM_PI, AR, 1.0f, 10000.0f, pPlayer, Vector3::UnitY, Vector3(0.0f, 10.0f, 50.0f));
+	m_GameObjects.push_back(m_TPScam);
 
 	//create DrawData struct and populate its pointers
 	m_DD = new DrawData;
@@ -97,16 +103,60 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	m_DD->m_cam = m_cam;
 	m_DD->m_light = m_light;
 
-	//Make window
-	TwInit(TW_DIRECT3D11, _pd3dDevice); // for Direct3D 11
-	TwWindowSize(width, height);
-	
-	TwBar* mybar;
-	mybar = TwNewBar("Settings");
+	//add random content to show the various what you've got here
+	Terrain* terrain = new Terrain("table.cmo", _pd3dDevice, m_fxFactory, Vector3(100.0f, 0.0f, 100.0f), 0.0f, 0.0f, 0.0f, 0.25f * Vector3::One);
+	m_GameObjects.push_back(terrain);
 
-	TwAddVarRW(mybar, "gravity", TW_TYPE_FLOAT, &m_GD->m_gravitational_constant, "min=0 max=10 step=0.01");
+	//add some stuff to show off
 
+	FileVBGO* terrainBox = new FileVBGO("../Assets/terrainTex.txt", _pd3dDevice);
+	m_GameObjects.push_back(terrainBox);
 
+	FileVBGO* Box = new FileVBGO("../Assets/cube.txt", _pd3dDevice);
+	m_GameObjects.push_back(Box);
+	Box->SetPos(Vector3(0.0f, 0.0f, -100.0f));
+	Box->SetPitch(XM_PIDIV4);
+	Box->SetScale(20.0f);
+
+	//L-system like tree
+	m_GameObjects.push_back(new Tree(4, 4, .6f, 10.0f *Vector3::Up, XM_PI / 6.0f, "JEMINA vase -up.cmo", _pd3dDevice, m_fxFactory));
+
+	VBCube* cube = new VBCube();
+	cube->init(11, _pd3dDevice);
+	cube->SetPos(Vector3(100.0f, 0.0f, 0.0f));
+	cube->SetScale(4.0f);
+	m_GameObjects.push_back(cube);
+
+	VBSpike* spikes = new VBSpike();
+	spikes->init(11, _pd3dDevice);
+	spikes->SetPos(Vector3(0.0f, 0.0f, 100.0f));
+	spikes->SetScale(4.0f);
+	m_GameObjects.push_back(spikes);
+
+	VBSpiral* spiral = new VBSpiral();
+	spiral->init(11, _pd3dDevice);
+	spiral->SetPos(Vector3(-100.0f, 0.0f, 0.0f));
+	spiral->SetScale(4.0f);
+	m_GameObjects.push_back(spiral);
+
+	VBPillow* pillow = new VBPillow();
+	pillow->init(11, _pd3dDevice);
+	pillow->SetPos(Vector3(-100.0f, 0.0f, -100.0f));
+	pillow->SetScale(4.0f);
+	m_GameObjects.push_back(pillow);
+
+	VBSnail* snail = new VBSnail(_pd3dDevice, "../Assets/baseline.txt", 150, 0.98f, 0.09f * XM_PI, 0.4f, Color(1.0f, 0.0f, 0.0f, 1.0f), Color(0.0f, 0.0f, 1.0f, 1.0f));
+	snail->SetPos(Vector3(-100.0f, 0.0f, 100.0f));
+	snail->SetScale(2.0f);
+	m_GameObjects.push_back(snail);
+
+	//Marching Cubes
+	VBMarchCubes* VBMC = new VBMarchCubes();
+	VBMC->init(Vector3(-8.0f, -8.0f, -17.0f), Vector3(8.0f, 8.0f, 23.0f), 60.0f*Vector3::One, 0.01, _pd3dDevice);
+	VBMC->SetPos(Vector3(100, 0, -100));
+	VBMC->SetPitch(-XM_PIDIV2);
+	VBMC->SetScale(Vector3(3, 3, 1.5));
+	m_GameObjects.push_back(VBMC);
 
 
 	//example basic 2D stuff
@@ -115,19 +165,13 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	m_GameObject2Ds.push_back(logo);
 
 	TextGO2D* text = new TextGO2D("Test Text");
-	text->SetPos(Vector2(200, 10));
+	text->SetPos(Vector2(100, 10));
 	text->SetColour(Color((float*)&Colors::Yellow));
 	m_GameObject2Ds.push_back(text);
-
-	//test masserino
-	mass* p_mass = new mass("logo_small", _pd3dDevice);
-	p_mass->SetPos(Vector2(300.0f, 300.0f));
-	m_GameObject2Ds.push_back(p_mass);
-
 };
 
 
-Game::~Game() 
+Game::~Game()
 {
 	//delete Game Data & Draw Data
 	delete m_GD;
@@ -175,7 +219,7 @@ Game::~Game()
 
 };
 
-bool Game::Tick() 
+bool Game::Tick()
 {
 	//tick audio engine
 	if (!m_audioEngine->Update())
@@ -200,12 +244,12 @@ bool Game::Tick()
 	//lock the cursor to the centre of the window
 	RECT window;
 	GetWindowRect(m_hWnd, &window);
+	SetCursorPos((window.left + window.right) >> 1, (window.bottom + window.top) >> 1);
 
 	//calculate frame time-step dt for passing down to game objects
 	DWORD currentTime = GetTickCount();
 	m_GD->m_dt = min((float)(currentTime - m_playTime) / 1000.0f, 0.1f);
 	m_playTime = currentTime;
-
 
 	//start to a VERY simple FSM
 	switch (m_GD->m_GS)
@@ -221,7 +265,7 @@ bool Game::Tick()
 		PlayTick();
 		break;
 	}
-	
+
 	return true;
 };
 
@@ -251,7 +295,7 @@ void Game::PlayTick()
 	}
 }
 
-void Game::Draw(ID3D11DeviceContext* _pd3dImmediateContext) 
+void Game::Draw(ID3D11DeviceContext* _pd3dImmediateContext)
 {
 	//set immediate context of the graphics device
 	m_DD->m_pd3dImmediateContext = _pd3dImmediateContext;
@@ -282,8 +326,6 @@ void Game::Draw(ID3D11DeviceContext* _pd3dImmediateContext)
 
 	//drawing text screws up the Depth Stencil State, this puts it back again!
 	_pd3dImmediateContext->OMSetDepthStencilState(m_states->DepthDefault(), 0);
-
-	TwDraw();
 };
 
 
