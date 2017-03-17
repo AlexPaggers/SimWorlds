@@ -1,6 +1,7 @@
 #include "Player.h"
 #include <dinput.h>
 #include "GameData.h"
+#include "mass.h"
 
 Player::Player(string _fileName, ID3D11Device* _pd3dDevice, IEffectFactory* _EF) : CMOGO(_fileName, _pd3dDevice, _EF)
 {
@@ -19,6 +20,38 @@ Player::~Player()
 }
 
 
+
+mass* Player::getClosestMass(std::vector<mass> _masses)
+{
+	mass* _currentMass = nullptr;
+
+	for (int it = 0; it < _masses.size(); it++)
+	{
+		if (it == 0)
+		{
+			_currentMass = &_masses[0];
+		}
+		else
+		{
+			if ((this->m_pos - _masses[it].GetPos()).Length() < (this->m_pos - _currentMass->GetPos()).Length())
+			{
+				_currentMass = &_masses[it];
+			}
+		}
+	}
+	return _currentMass;
+}
+
+
+Vector3 Player::findGravity(mass* _currentClosestMass)
+{
+	Vector3 _graviDirection = Vector3(m_pos - _currentClosestMass->GetPos());
+	_graviDirection.Normalize();
+	return _graviDirection;
+}
+
+
+
 void Player::Tick(GameData* _GD)
 {
 
@@ -33,26 +66,12 @@ void Player::Tick(GameData* _GD)
 		m_yaw -= rotSpeed;
 	}
 
-	//move player up and down
-	if (_GD->m_keyboardState[DIK_R] & 0x80)
-	{
-		m_acc.y += 40.0f;
-	}
+	m_acc = findGravity(m_clostestMass) * _GD->m_dt;
 
-	if (_GD->m_keyboardState[DIK_F] & 0x80)
-	{
-		m_acc.y -= 40.0f;
-	}
+	m_vel += m_acc;
+	m_pos += m_vel;
 
-	//limit motion of the player
-	float length = m_pos.Length();
-	float maxLength = 500.0f;
-	if (length > maxLength)
-	{
-		m_pos.Normalize();
-		m_pos *= maxLength;
-		m_vel *= -0.9; //VERY simple bounce back
-	}
+	m_acc = Vector3::Zero;
 
 	//apply my base behaviour
 	CMOGO::Tick(_GD);

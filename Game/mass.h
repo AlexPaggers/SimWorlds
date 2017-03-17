@@ -1,22 +1,21 @@
 #pragma once
-#include "ImageGO2D.h"
+#include "CMOGO.h"
 #include <vector>
 
-class mass : public ImageGO2D
+class mass : public CMOGO
 {
 public:
-	mass(string _fileName, ID3D11Device* _GD);
+	mass(string _fileName, ID3D11Device* _pd3dDevice, IEffectFactory* _EF);
 	~mass();
 	
 	void Tick(GameData* _GD);
 
+	void setMass(float _mass) { m_mass = _mass; }
 
 
 private:
-	float	m_mass;	
+	float	m_mass = 1;	
 
-protected:
 
-	ID3D11ShaderResourceView* m_pTextureRV;
 };
 
