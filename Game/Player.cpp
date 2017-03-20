@@ -21,7 +21,7 @@ Player::~Player()
 
 
 
-mass* Player::getClosestMass(std::vector<mass> _masses)
+mass* Player::getClosestMass(std::vector<mass *> _masses)
 {
 	mass* _currentMass = nullptr;
 
@@ -29,13 +29,13 @@ mass* Player::getClosestMass(std::vector<mass> _masses)
 	{
 		if (it == 0)
 		{
-			_currentMass = &_masses[0];
+			_currentMass = _masses[0];
 		}
 		else
 		{
-			if ((this->m_pos - _masses[it].GetPos()).Length() < (this->m_pos - _currentMass->GetPos()).Length())
+			if ((this->m_pos - _masses[it]->GetPos()).Length() < (this->m_pos - _currentMass->GetPos()).Length())
 			{
-				_currentMass = &_masses[it];
+				_currentMass = _masses[it];
 			}
 		}
 	}
@@ -50,10 +50,20 @@ Vector3 Player::findGravity(mass* _currentClosestMass)
 	return _graviDirection;
 }
 
+void Player::setListOfMasses(std::vector<mass*> _masses)
+{
+	for (int it = 0; it < _masses.size(); it++)
+	{
+		m_masses.push_back(_masses[it]);
+	}
+}
+
 
 
 void Player::Tick(GameData* _GD)
 {
+
+	getClosestMass(m_masses);
 
 	//change orinetation of player
 	float rotSpeed = 2.0f * _GD->m_dt;
@@ -67,7 +77,7 @@ void Player::Tick(GameData* _GD)
 	}
 
 	m_acc = findGravity(m_clostestMass) * _GD->m_dt;
-
+	
 	m_vel += m_acc;
 	m_pos += m_vel;
 

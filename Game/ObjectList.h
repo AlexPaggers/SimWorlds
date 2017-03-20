@@ -11,6 +11,8 @@
 #include "Terrain.h"
 #include "Tree.h"
 
+#include "mass.h"
+
 //VBGO examples
 #include "VBCube.h"
 #include "VBPillow.h"
@@ -24,4 +26,3 @@
 #include "GameObject2D.h"
 #include "ImageGO2D.h"
 #include "TextGO2D.h"
-#include "mass.h"

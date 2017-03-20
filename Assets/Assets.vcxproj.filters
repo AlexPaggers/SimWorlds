@@ -35,6 +35,12 @@
     <MeshContentTask Include="Vase\JEMINA vase -up.fbx">
       <Filter>Models</Filter>
     </MeshContentTask>
+    <MeshContentTask Include="Sphere\Technosphere.fbx">
+      <Filter>Models</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Sphere\Ball Thing.fbx">
+      <Filter>Models</Filter>
+    </MeshContentTask>
   </ItemGroup>
   <ItemGroup>
     <Text Include="baseline.txt">

@@ -13,6 +13,7 @@
 #include "SpriteBatch.h"
 #include "SpriteFont.h"
 #include "Audio.h"
+#include <vector>
 
 using std::list;
 using std::unique_ptr;
@@ -46,6 +47,8 @@ protected:
 	Camera* m_cam; //principle camera
 	TPSCamera* m_TPScam;//TPS cam
 	Light* m_light; //base light
+
+	std::vector<mass *> m_masses;
 
 	list<GameObject *> m_GameObjects; //data structure storing all GameObjects of this Game
 	list<GameObject2D *> m_GameObject2Ds;//ditto 2D objects
