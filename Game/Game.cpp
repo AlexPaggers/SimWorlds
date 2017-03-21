@@ -11,6 +11,7 @@
 #include "GameData.h"
 #include "drawdata.h"
 #include "DrawData2D.h"
+#include "AntTweakBar.h"
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
@@ -81,7 +82,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 
 	//create a base camera
 	m_cam = new Camera(0.25f * XM_PI, AR, 1.0f, 10000.0f, Vector3::UnitY, Vector3::Zero);
-	m_cam->SetPos(Vector3(0.0f, 100.0f, 100.0f));
+	m_cam->SetPos(Vector3(0.0f, 500.0f, 100.0f));
 	m_GameObjects.push_back(m_cam);
 
 	//create a base light
@@ -90,7 +91,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 
 	//add Player
 	Player* pPlayer = new Player("Technosphere.cmo", _pd3dDevice, m_fxFactory);
-	pPlayer->SetScale(Vector3::One * 0.01);
+	pPlayer->SetScale(Vector3::One * 0.1);
 	pPlayer->SetPos(Vector3::Zero);
 	m_GameObjects.push_back(pPlayer);
 
@@ -107,20 +108,33 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 
 	//make masserino
 	mass* pMass = new mass("Ball Thing.cmo", _pd3dDevice, m_fxFactory);
-	pMass->SetPos(Vector3::Zero);
+	pMass->SetPos(Vector3(50,0,0));
 	pMass->SetScale(Vector3::One * 0.3);
 	m_GameObjects.push_back(pMass);
 	m_masses.push_back(pMass);
+	
+	//make masserino
+	mass* pMass1 = new mass("Ball Thing.cmo", _pd3dDevice, m_fxFactory);
+	pMass1->SetPos(Vector3(-100, 0, 0));
+	pMass1->SetScale(Vector3::One * 0.3);
+	m_GameObjects.push_back(pMass1);
+	m_masses.push_back(pMass1);
 
-	//example basic 2D stuff
-	ImageGO2D* logo = new ImageGO2D("logo_small", _pd3dDevice);
-	logo->SetPos(200.0f * Vector2::One);
-	m_GameObject2Ds.push_back(logo);
 
-	TextGO2D* text = new TextGO2D("Test Text");
-	text->SetPos(Vector2(100, 10));
-	text->SetColour(Color((float*)&Colors::Yellow));
-	m_GameObject2Ds.push_back(text);
+
+	//Allocate the masses
+	pPlayer->setListOfMasses(m_masses);
+
+	pPlayer->setVelocity(Vector3(0, 0, -1));
+
+
+	TwInit(TW_DIRECT3D11, _pd3dDevice); // for Direct3D 11
+	TwWindowSize(width, height);
+	TwBar *tweakBar;
+	tweakBar = TwNewBar("Settings Situation");
+	
+	TwAddVarRW(tweakBar, "Gravitational Constant", TW_TYPE_FLOAT, &m_GD->m_gravitational_constant, "min=0 max=10 step=0.01");
+
 };
 
 
@@ -197,7 +211,7 @@ bool Game::Tick()
 	//lock the cursor to the centre of the window
 	RECT window;
 	GetWindowRect(m_hWnd, &window);
-	SetCursorPos((window.left + window.right) >> 1, (window.bottom + window.top) >> 1);
+	//SetCursorPos((window.left + window.right) >> 1, (window.bottom + window.top) >> 1);
 
 	//calculate frame time-step dt for passing down to game objects
 	DWORD currentTime = GetTickCount();
@@ -281,6 +295,9 @@ void Game::Draw(ID3D11DeviceContext* _pd3dImmediateContext)
 
 	//drawing text screws up the Depth Stencil State, this puts it back again!
 	_pd3dImmediateContext->OMSetDepthStencilState(m_states->DepthDefault(), 0);
+
+	TwDraw();
+
 };
 
 
