@@ -92,7 +92,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	//add Player
 	Player* pPlayer = new Player("Technosphere.cmo", _pd3dDevice, m_fxFactory);
 	pPlayer->SetScale(Vector3::One * 0.1);
-	pPlayer->SetPos(Vector3::Zero);
+	pPlayer->SetPos(Vector3(50,0, 0));
 	m_GameObjects.push_back(pPlayer);
 
 	//add a secondary camera
@@ -109,23 +109,23 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	//make masserino
 	mass* pMass = new mass("Ball Thing.cmo", _pd3dDevice, m_fxFactory);
 	pMass->SetPos(Vector3(50,0,0));
-	pMass->SetScale(Vector3::One * 0.3);
+	pMass->setMass(5);
 	m_GameObjects.push_back(pMass);
 	m_masses.push_back(pMass);
 	
 	//make masserino
 	mass* pMass1 = new mass("Ball Thing.cmo", _pd3dDevice, m_fxFactory);
 	pMass1->SetPos(Vector3(-100, 0, 0));
-	pMass1->SetScale(Vector3::One * 0.3);
+	pMass1->setMass(5);
 	m_GameObjects.push_back(pMass1);
 	m_masses.push_back(pMass1);
-
+	
 
 
 	//Allocate the masses
 	pPlayer->setListOfMasses(m_masses);
 
-	pPlayer->setVelocity(Vector3(0, 0, -1));
+	//pPlayer->setVelocity(Vector3(0, 0, -1));
 
 
 	TwInit(TW_DIRECT3D11, _pd3dDevice); // for Direct3D 11
@@ -134,6 +134,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	tweakBar = TwNewBar("Settings Situation");
 	
 	TwAddVarRW(tweakBar, "Gravitational Constant", TW_TYPE_FLOAT, &m_GD->m_gravitational_constant, "min=0 max=10 step=0.01");
+	TwAddVarRW(tweakBar, "Jump Height", TW_TYPE_FLOAT, &m_GD->m_player_jump_height, "min=0 max=10 step=0.01");
 
 };
 

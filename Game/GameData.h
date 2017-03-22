@@ -16,6 +16,7 @@ struct GameData
 	float m_dt;  //time step since last frame
 	GameState m_GS; //global GameState
 	float m_gravitational_constant = 2;
+	float m_player_jump_height = 1;
 
 	
 

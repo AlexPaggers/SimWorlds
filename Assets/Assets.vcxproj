@@ -152,6 +152,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <MeshContentTask Include="ball.FBX" />
     <MeshContentTask Include="Bird\BirdModelV1.fbx" />
     <MeshContentTask Include="Sphere\Ball Thing.fbx" />
     <MeshContentTask Include="Sphere\Technosphere.fbx" />

@@ -41,6 +41,9 @@
     <MeshContentTask Include="Sphere\Ball Thing.fbx">
       <Filter>Models</Filter>
     </MeshContentTask>
+    <MeshContentTask Include="ball.FBX">
+      <Filter>Models</Filter>
+    </MeshContentTask>
   </ItemGroup>
   <ItemGroup>
     <Text Include="baseline.txt">

@@ -10,12 +10,14 @@ public:
 	
 	void Tick(GameData* _GD);
 
-	void setMass(float _mass) { m_mass = _mass; }
+	void setMass(float _mass);
 
+	float getMass()				{ return m_mass; }
+	float getRadius()			{ return m_radius; }
 
 private:
 	float	m_mass = 1;	
-
+	float	m_radius = 1;
 
 };
 

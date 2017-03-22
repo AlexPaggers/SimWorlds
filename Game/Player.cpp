@@ -10,8 +10,6 @@ Player::Player(string _fileName, ID3D11Device* _pd3dDevice, IEffectFactory* _EF)
 
 	m_pos.y = 10.0f;
 
-	SetDrag(0.7);
-	SetPhysicsOn(true);
 }
 
 Player::~Player()
@@ -61,29 +59,48 @@ void Player::setListOfMasses(std::vector<mass*> _masses)
 
 
 void Player::Tick(GameData* _GD)
-{
-
-	m_clostestMass = getClosestMass(m_masses);
-
-	//change orinetation of player
-	float rotSpeed = 2.0f * _GD->m_dt;
-	if (_GD->m_keyboardState[DIK_A] & 0x80)
+{	
+	if (!m_grounded)
 	{
-		m_yaw += rotSpeed;
-	}
-	if (_GD->m_keyboardState[DIK_D] & 0x80)
-	{
-		m_yaw -= rotSpeed;
-	}
+		m_clostestMass = getClosestMass(m_masses);
 
-	m_acc = findGravity(m_clostestMass) * _GD->m_dt * _GD->m_gravitational_constant 
+		//change orinetation of player
+		float rotSpeed = 2.0f * _GD->m_dt;
+		if (_GD->m_keyboardState[DIK_A] & 0x80)
+		{
+			m_yaw += rotSpeed;
+		}
+		if (_GD->m_keyboardState[DIK_D] & 0x80)
+		{
+			m_yaw -= rotSpeed;
+		}
+
+		m_acc = findGravity(m_clostestMass) * _GD->m_dt * _GD->m_gravitational_constant
 			// /(pow(this->GetPos().Length() - m_clostestMass->GetPos().Length(), 2))
 			;
-	
-	m_vel += m_acc;
-	m_pos += m_vel;
+
+		m_vel += m_acc;
+		m_pos += m_vel;
+
+		if ((m_pos - m_clostestMass->GetPos()).Length() < m_clostestMass->getRadius())
+		{
+			m_grounded = true;
+		}
+
+	}
+	else
+	{
+		m_vel = Vector3::Zero;
+	}
 
 	m_acc = Vector3::Zero;
+
+	if (_GD->m_keyboardState[DIK_SPACE] & 0x80 &&
+		m_grounded)
+	{
+		setVelocity(-findGravity(m_clostestMass) * _GD->m_player_jump_height);
+		m_grounded = false;
+	}
 
 	//apply my base behaviour
 	CMOGO::Tick(_GD);

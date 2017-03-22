@@ -37,6 +37,8 @@ private:
 	mass* m_clostestMass = nullptr;
 	std::vector<mass *> m_masses;
 
+	bool m_grounded;
+
 };
 
 #endif
