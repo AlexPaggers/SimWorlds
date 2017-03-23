@@ -82,41 +82,41 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 
 	//create a base camera
 	m_cam = new Camera(0.25f * XM_PI, AR, 1.0f, 10000.0f, Vector3::UnitY, Vector3::Zero);
-	m_cam->SetPos(Vector3(0.0f, 500.0f, 100.0f));
+	m_cam->SetPos(Vector3(0.0f, 0.0f, 500.0f));
 	m_GameObjects.push_back(m_cam);
 
 	//create a base light
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
 	m_GameObjects.push_back(m_light);
 
+	//create DrawData struct and populate its pointers
+	m_DD = new DrawData;
+	m_DD->m_pd3dImmediateContext = nullptr;
+	m_DD->m_states = m_states;
+	m_DD->m_cam = m_cam;
+	m_DD->m_light = m_light;         
+
 	//add Player
 	Player* pPlayer = new Player("Technosphere.cmo", _pd3dDevice, m_fxFactory);
 	pPlayer->SetScale(Vector3::One * 0.1);
-	pPlayer->SetPos(Vector3(50,0, 0));
+	pPlayer->SetPos(Vector3(100, 0, 0));
 	m_GameObjects.push_back(pPlayer);
 
 	//add a secondary camera
 	m_TPScam = new TPSCamera(0.25f * XM_PI, AR, 1.0f, 10000.0f, pPlayer, Vector3::UnitY, Vector3(0.0f, 10.0f, 50.0f));
 	m_GameObjects.push_back(m_TPScam);
 
-	//create DrawData struct and populate its pointers
-	m_DD = new DrawData;
-	m_DD->m_pd3dImmediateContext = nullptr;
-	m_DD->m_states = m_states;
-	m_DD->m_cam = m_cam;
-	m_DD->m_light = m_light;                                                                                                                                                                
-
 	//make masserino
 	mass* pMass = new mass("Ball Thing.cmo", _pd3dDevice, m_fxFactory);
 	pMass->SetPos(Vector3(50,0,0));
-	pMass->setMass(5);
+	pMass->setMass(3);
 	m_GameObjects.push_back(pMass);
 	m_masses.push_back(pMass);
 	
 	//make masserino
 	mass* pMass1 = new mass("Ball Thing.cmo", _pd3dDevice, m_fxFactory);
 	pMass1->SetPos(Vector3(-100, 0, 0));
-	pMass1->setMass(5);
+	pMass1->setMass(3);
 	m_GameObjects.push_back(pMass1);
 	m_masses.push_back(pMass1);
 	
@@ -135,6 +135,8 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	
 	TwAddVarRW(tweakBar, "Gravitational Constant", TW_TYPE_FLOAT, &m_GD->m_gravitational_constant, "min=0 max=10 step=0.01");
 	TwAddVarRW(tweakBar, "Jump Height", TW_TYPE_FLOAT, &m_GD->m_player_jump_height, "min=0 max=10 step=0.01");
+
+	m_GD->m_GS = GS_PLAY_MAIN_CAM;
 
 };
 
@@ -240,17 +242,17 @@ bool Game::Tick()
 void Game::PlayTick()
 {
 	//upon space bar switch camera state
-	if ((m_keyboardState[DIK_SPACE] & 0x80) && !(m_prevKeyboardState[DIK_SPACE] & 0x80))
-	{
-		if (m_GD->m_GS == GS_PLAY_MAIN_CAM)
-		{
-			m_GD->m_GS = GS_PLAY_TPS_CAM;
-		}
-		else
-		{
-			m_GD->m_GS = GS_PLAY_MAIN_CAM;
-		}
-	}
+	//if ((m_keyboardState[DIK_SPACE] & 0x80) && !(m_prevKeyboardState[DIK_SPACE] & 0x80))
+	//{
+	//	if (m_GD->m_GS == GS_PLAY_MAIN_CAM)
+	//	{
+	//		m_GD->m_GS = GS_PLAY_TPS_CAM;
+	//	}
+	//	else
+	//	{
+	//		m_GD->m_GS = GS_PLAY_MAIN_CAM;
+	//	}
+	//}
 
 	
 

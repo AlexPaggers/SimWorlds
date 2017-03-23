@@ -60,6 +60,8 @@ void Player::setListOfMasses(std::vector<mass*> _masses)
 
 void Player::Tick(GameData* _GD)
 {	
+	
+	
 	if (!m_grounded)
 	{
 		m_clostestMass = getClosestMass(m_masses);
@@ -76,7 +78,8 @@ void Player::Tick(GameData* _GD)
 		}
 
 		m_acc = findGravity(m_clostestMass) * _GD->m_dt * _GD->m_gravitational_constant
-			// /(pow(this->GetPos().Length() - m_clostestMass->GetPos().Length(), 2))
+		//	/(pow(this->GetPos().Length() - m_clostestMass->GetPos().Length(), 2))
+		//	/ (this->GetPos().Length() - m_clostestMass->GetPos().Length())
 			;
 
 		m_vel += m_acc;
@@ -101,6 +104,9 @@ void Player::Tick(GameData* _GD)
 		setVelocity(-findGravity(m_clostestMass) * _GD->m_player_jump_height);
 		m_grounded = false;
 	}
+
+	Vector3 D = this->GetPos() - m_clostestMass->GetPos();
+
 
 	//apply my base behaviour
 	CMOGO::Tick(_GD);
