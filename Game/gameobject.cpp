@@ -30,5 +30,4 @@ void GameObject::Tick(GameData* _GD)
 	m_worldMat = m_fudge * scaleMat * m_rotMat * transMat;
 
 	//zero acceleration ready for the next time round
-	m_acc = Vector3::Zero;
 }

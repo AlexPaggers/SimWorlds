@@ -17,6 +17,7 @@ struct GameData
 	GameState m_GS; //global GameState
 	float m_gravitational_constant = 2;
 	float m_player_jump_height = 1;
+	float m_player_walk_speed = 1;
 
 	
 

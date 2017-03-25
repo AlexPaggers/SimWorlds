@@ -82,7 +82,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 
 	//create a base camera
 	m_cam = new Camera(0.25f * XM_PI, AR, 1.0f, 10000.0f, Vector3::UnitY, Vector3::Zero);
-	m_cam->SetPos(Vector3(0.0f, 0.0f, 500.0f));
+	m_cam->SetPos(Vector3(0.0f, 0.0f, 600.0f));
 	m_GameObjects.push_back(m_cam);
 
 	//create a base light
@@ -115,7 +115,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	
 	//make masserino
 	mass* pMass1 = new mass("Ball Thing.cmo", _pd3dDevice, m_fxFactory);
-	pMass1->SetPos(Vector3(-100, 0, 0));
+	pMass1->SetPos(Vector3(-200, 0, 0));
 	pMass1->setMass(3);
 	m_GameObjects.push_back(pMass1);
 	m_masses.push_back(pMass1);
@@ -135,6 +135,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	
 	TwAddVarRW(tweakBar, "Gravitational Constant", TW_TYPE_FLOAT, &m_GD->m_gravitational_constant, "min=0 max=10 step=0.01");
 	TwAddVarRW(tweakBar, "Jump Height", TW_TYPE_FLOAT, &m_GD->m_player_jump_height, "min=0 max=10 step=0.01");
+	TwAddVarRW(tweakBar, "Movement Speed", TW_TYPE_FLOAT, &m_GD->m_player_walk_speed, "min=0 max=10 step=0.01");
 
 	m_GD->m_GS = GS_PLAY_MAIN_CAM;
 

@@ -68,22 +68,13 @@ void Player::Tick(GameData* _GD)
 
 		//change orinetation of player
 		float rotSpeed = 2.0f * _GD->m_dt;
-		if (_GD->m_keyboardState[DIK_A] & 0x80)
-		{
-			m_yaw += rotSpeed;
-		}
-		if (_GD->m_keyboardState[DIK_D] & 0x80)
-		{
-			m_yaw -= rotSpeed;
-		}
+
 
 		m_acc = findGravity(m_clostestMass) * _GD->m_dt * _GD->m_gravitational_constant
 		//	/(pow(this->GetPos().Length() - m_clostestMass->GetPos().Length(), 2))
 		//	/ (this->GetPos().Length() - m_clostestMass->GetPos().Length())
 			;
 
-		m_vel += m_acc;
-		m_pos += m_vel;
 
 		if ((m_pos - m_clostestMass->GetPos()).Length() < m_clostestMass->getRadius())
 		{
@@ -96,7 +87,6 @@ void Player::Tick(GameData* _GD)
 		m_vel = Vector3::Zero;
 	}
 
-	m_acc = Vector3::Zero;
 
 	if (_GD->m_keyboardState[DIK_SPACE] & 0x80 &&
 		m_grounded)
@@ -105,9 +95,27 @@ void Player::Tick(GameData* _GD)
 		m_grounded = false;
 	}
 
-	Vector3 D = this->GetPos() - m_clostestMass->GetPos();
+	if (_GD->m_keyboardState[DIK_A] & 0x80)
+	{
+		Vector3 _D = Vector3(-(m_pos - m_clostestMass->GetPos()).y, (m_pos - m_clostestMass->GetPos()).x, 0);
+		_D.Normalize();
+		m_vel += _D * _GD->m_player_walk_speed * _GD->m_dt;
+	}
+	if (_GD->m_keyboardState[DIK_D] & 0x80)
+	{
+		Vector3 _D = Vector3((m_pos - m_clostestMass->GetPos()).y, -(m_pos - m_clostestMass->GetPos()).x, 0);
+		_D.Normalize();
+		m_vel += _D * _GD->m_player_walk_speed * _GD->m_dt;
+	}
 
-
+	m_pos.z = 0;
 	//apply my base behaviour
+
+	m_vel += m_acc;
+	m_pos += m_vel;
+
+
+	m_acc = Vector3::Zero;
+
 	CMOGO::Tick(_GD);
 }
