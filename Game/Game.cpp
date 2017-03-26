@@ -137,6 +137,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	TwAddVarRW(tweakBar, "Jump Height", TW_TYPE_FLOAT, &m_GD->m_player_jump_height, "min=0 max=10 step=0.01");
 	TwAddVarRW(tweakBar, "Movement Speed", TW_TYPE_FLOAT, &m_GD->m_player_walk_speed, "min=0 max=10 step=0.01");
 
+
 	m_GD->m_GS = GS_PLAY_MAIN_CAM;
 
 };
