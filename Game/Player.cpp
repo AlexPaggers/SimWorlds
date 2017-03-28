@@ -2,6 +2,7 @@
 #include <dinput.h>
 #include "GameData.h"
 #include "mass.h"
+#include "VBGO.h"
 
 Player::Player(string _fileName, ID3D11Device* _pd3dDevice, IEffectFactory* _EF) : CMOGO(_fileName, _pd3dDevice, _EF)
 {
@@ -9,6 +10,8 @@ Player::Player(string _fileName, ID3D11Device* _pd3dDevice, IEffectFactory* _EF)
 	m_fudge = Matrix::CreateRotationY(XM_PI);
 
 	m_pos.y = 10.0f;
+
+	VBGO::
 
 }
 
@@ -43,7 +46,7 @@ mass* Player::getClosestMass(std::vector<mass *> _masses)
 
 Vector3 Player::findGravity(mass* _currentClosestMass)
 {
-	Vector3 _graviDirection = -Vector3(m_pos - _currentClosestMass->GetPos());
+	Vector3 _graviDirection = -Vector3(m_pos - _currentClosestMass->GetPos()) * _currentClosestMass->getMass();
 	_graviDirection.Normalize();
 	return _graviDirection;
 }
@@ -91,13 +94,13 @@ void Player::Tick(GameData* _GD)
 	{
 		Vector3 _D = Vector3(-(m_pos - m_clostestMass->GetPos()).y, (m_pos - m_clostestMass->GetPos()).x, 0);
 		_D.Normalize();
-		m_pos += (_D * _GD->m_player_walk_speed * _GD->m_dt * 10);
+		m_pos += (_D * _GD->m_player_walk_speed * _GD->m_dt * 100);
 	}
 	if (_GD->m_keyboardState[DIK_D] & 0x80)
 	{
 		Vector3 _D = Vector3((m_pos - m_clostestMass->GetPos()).y, -(m_pos - m_clostestMass->GetPos()).x, 0);
 		_D.Normalize();
-		m_pos += (_D * _GD->m_player_walk_speed * _GD->m_dt * 10);
+		m_pos += (_D * _GD->m_player_walk_speed * _GD->m_dt * 100);
 	}
 
 	m_pos.z = 0;

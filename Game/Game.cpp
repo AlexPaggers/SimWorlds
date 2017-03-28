@@ -109,16 +109,23 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	//make masserino
 	mass* pMass = new mass("Ball Thing.cmo", _pd3dDevice, m_fxFactory);
 	pMass->SetPos(Vector3(50,0,0));
-	pMass->setMass(3);
+	pMass->setMass(5);
 	m_GameObjects.push_back(pMass);
 	m_masses.push_back(pMass);
 	
 	//make masserino
 	mass* pMass1 = new mass("Ball Thing.cmo", _pd3dDevice, m_fxFactory);
-	pMass1->SetPos(Vector3(-200, 0, 0));
-	pMass1->setMass(3);
+	pMass1->SetPos(Vector3(-200, -100, 0));
+	pMass1->setMass(2);
 	m_GameObjects.push_back(pMass1);
 	m_masses.push_back(pMass1);
+
+	//make masserino
+	mass* pMass2 = new mass("Ball Thing.cmo", _pd3dDevice, m_fxFactory);
+	pMass2->SetPos(Vector3(-200, 100, 0));
+	pMass2->setMass(3);
+	m_GameObjects.push_back(pMass2);
+	m_masses.push_back(pMass2);
 	
 
 
